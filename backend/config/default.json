@@ -1,0 +1,3 @@
+{
+    "mongoURI":"mongodb://devbits:1234@ac-duuvszk-shard-00-00.lpx2z1u.mongodb.net:27017,ac-duuvszk-shard-00-01.lpx2z1u.mongodb.net:27017,ac-duuvszk-shard-00-02.lpx2z1u.mongodb.net:27017/?ssl=true&replicaSet=atlas-u0a7zd-shard-0&authSource=admin&retryWrites=true&w=majority"
+}
