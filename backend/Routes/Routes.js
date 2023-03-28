@@ -1,31 +1,47 @@
 const express = require('express')
 const router = express.Router()
-const userModel = require('../models/Users')
+const User = require('../models/Users').User
+let jwt = require('jsonwebtoken');
+const authenticateUser=require("../middleWare/authenticateUser")
 
 router.post('/signup', async (req, res) => {
-
     try {
-        const user1= await userModel.findOne({Email: req.body.Email})
-        console.log(user1)
-        if (user1) {
-            console.log(user1)
-            res.json({ error: "User with given email id already exists!!" })
-            return;
+        const existing_user= await User.findOne({email: req.body.email})
+        if (existing_user) {
+            return res.status(400).json({ error: "User with given email id already exists!!" })
         }
-        const user = new userModel({
-            Username: req.body.Username,
-            PhoneNo: req.body.PhoneNo,
-            Email: req.body.Email,
-            Password: req.body.Password,
+        created_user=await User.create({
+            email: req.body.email,
+            phoneNo: req.body.phoneNo,
+            password: req.body.password,
         })
-        await user.save()
-            .then(data => {
-                res.json(data)
-                console.log("hii")
-            })
+        return res.status(200).json("Registration Successfull.Please Login!")
     }
     catch (err) {
-        res.json(err.message)
+        res.status(400).json(err.message)
     }
 })
+
+router.post('/login', async (req, res) => {
+    try {
+        const existing_user= await User.findOne({email: req.body.email, password: req.body.password})
+
+        if (!existing_user) {
+            return res.status(400).json({ error: "Invalid Credentials" })
+        }
+
+        const email=existing_user.email
+        const token= jwt.sign({email},"secret")
+        return res.status(200).json(token)
+    }
+    catch (err) {
+        res.status(400).json(err.message)
+    }
+})
+
+router.get("/t",authenticateUser.authenticateUser,(req,res)=>{
+    console.log(req.user)
+    res.status(200).json("successfull")
+})
+
 module.exports = router

@@ -2,21 +2,17 @@ const mongoose=require('mongoose')
 const Schema=mongoose.Schema
 
 const UserSchema=new Schema({
-    Username:{
-        type:String,
-        required:true
-    },
-    PhoneNo:{
-        type:String
-    },
-    Email:{
+    email:{
         type:String,
         required:true,
         unique:true
     },
-    Password:{
+    phoneNo:{
+        type:String
+    },
+    password:{
         type:String,
         required:true
     }
 })
-module.exports=Item=mongoose.model('users',UserSchema)
+module.exports.User=mongoose.model('Users',UserSchema)
