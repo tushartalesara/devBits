@@ -8,8 +8,12 @@ const Banner = () => {
       <h1>Everse, one place for all your needs</h1>
       <p>Best offers available</p>
       <div className="banner-btns">
-        <HashLink to='#products' className='link' >
-          <button className='btns btns-outline'>OUR FINANCIAL SECURITIES</button></HashLink>
+        <HashLink to='#finances' className='link' >
+          <button className='btns btns-outline'>FINANCIAL SECURITIES</button>
+        </HashLink>
+        <HashLink to='#aboutUs' className='link' >
+          <button className='btns btns-outline'>ABOUT US</button>
+        </HashLink>
       </div>
     </div>
   );

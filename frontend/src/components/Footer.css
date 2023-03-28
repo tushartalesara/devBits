@@ -1,0 +1,51 @@
+.footer-container{
+    background: linear-gradient(90deg, rgb(28, 27, 27) 0%, rgb(26, 23, 23) 100%);
+    font-size: 1.2rem;
+    align-items: center;
+    bottom: 0;
+    z-index: 999;
+    color: #fff;
+    text-align: center;
+    padding: 30px 0;
+}
+.handles{
+    margin: 0 0 20px 0;
+}
+.fa-brands{
+    font-size: 40px;
+    margin: 0 10px;
+}
+.sections{
+    margin-top: 30px;
+    padding: 0 500px;
+}
+.sections-list{
+    padding: 0;
+    list-style: none;
+    display: flex;
+    justify-content: space-evenly;
+}
+.list-item{
+    font-size: 20px;
+}
+.link{
+    color: #fff;
+    text-decoration: none;
+}
+.link:hover{
+    border-bottom: 2px solid #fff;
+}
+.contact{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+.contactUs{
+    width: 50%;
+    height: 300px;
+    align-items: center;
+}
+.location{
+    width: 50%;
+    height: 300px;
+}
