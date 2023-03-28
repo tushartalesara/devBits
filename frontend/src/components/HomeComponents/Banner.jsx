@@ -8,10 +8,10 @@ const Banner = () => {
       <h1>Everse, one place for all your needs</h1>
       <p>Best offers available</p>
       <div className="banner-btns">
-        <HashLink to='#finances' className='link' >
+        <HashLink to='#finances' className='banner-link' >
           <button className='btns btns-outline'>FINANCIAL SECURITIES</button>
         </HashLink>
-        <HashLink to='#aboutUs' className='link' >
+        <HashLink to='#aboutUs' className='banner-link' >
           <button className='btns btns-outline'>ABOUT US</button>
         </HashLink>
       </div>
