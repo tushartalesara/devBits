@@ -8,10 +8,7 @@ const Products = () => {
       <div className="cards-container">
         <div className="cards-wrapper">
           <main className="cards-items">
-            <Product />
-            <Product />
-            <Product />
-            <Product />
+            <Product name="Stocks" desc="Here you can buy and sell stocks avilable with us"/>
           </main>
           </div>
         </div>

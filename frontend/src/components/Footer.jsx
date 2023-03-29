@@ -6,11 +6,11 @@ const Footer = () => {
   return (
     <div className="footer-container">
       <div className="handles">
-        <i class="fa-brands fa-facebook" />
-        <i class="fa-brands fa-instagram" />
-        <i class="fa-brands fa-twitter" />
-        <i class="fa-brands fa-github" />
-        <i class="fa-brands fa-youtube" />
+        <a href={"https://www.facebook.com"}><i class="fa-brands fa-facebook" /></a>
+        <a href={"https://www.instagram.com"}><i class="fa-brands fa-instagram" /></a>
+        <a href={"https://www.twitter.com"}><i class="fa-brands fa-twitter" /></a>
+        <a href={"https://www.github.com"}><i class="fa-brands fa-github" /></a>
+        <a href={"https://www.youtube.com"}><i class="fa-brands fa-youtube" /></a>
       </div>
       <div className="sections">
         <ul className="sections-list">

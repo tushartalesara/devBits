@@ -11,6 +11,10 @@
 .handles{
     margin: 0 0 20px 0;
 }
+.handles>a{
+    text-decoration: none;
+    color: #fff;
+}
 .fa-brands{
     font-size: 40px;
     margin: 0 10px;
