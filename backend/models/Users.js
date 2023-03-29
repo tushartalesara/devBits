@@ -10,9 +10,14 @@ const UserSchema=new Schema({
     phoneNo:{
         type:String
     },
+    walletAmount:{
+        type: Number,
+        default: 1000,
+        min: 0,
+    },
     password:{
         type:String,
         required:true
     }
 })
-module.exports.User=mongoose.model('Users',UserSchema)
+module.exports=mongoose.model('Users',UserSchema)
