@@ -3,6 +3,7 @@ const router = express.Router()
 const User = require('../models/Users').User
 let jwt = require('jsonwebtoken');
 const authenticateUser=require("../middleWare/authenticateUser")
+const bcrypt = require("bcrypt")
 
 router.post('/signup', async (req, res) => {
     try {
@@ -10,10 +11,11 @@ router.post('/signup', async (req, res) => {
         if (existing_user) {
             return res.status(400).json({ error: "User with given email id already exists!!" })
         }
+        const encrypted_password=await bcrypt.hash(req.body.password, 10);
         created_user=await User.create({
             email: req.body.email,
             phoneNo: req.body.phoneNo,
-            password: req.body.password,
+            password: encrypted_password,
         })
         return res.status(200).json("Registration Successfull.Please Login!")
     }
@@ -24,12 +26,16 @@ router.post('/signup', async (req, res) => {
 
 router.post('/login', async (req, res) => {
     try {
-        const existing_user= await User.findOne({email: req.body.email, password: req.body.password})
+        const existing_user= await User.findOne({email: req.body.email})
 
         if (!existing_user) {
             return res.status(400).json({ error: "Invalid Credentials" })
         }
-
+        const result = await bcrypt.compare(req.body.password, existing_user.password);
+        if (!result) {
+            return res.status(400).json({ error: "Invalid Credentials" })
+        }
+        
         const email=existing_user.email
         const token= jwt.sign({email},"secret")
         return res.status(200).json(token)
