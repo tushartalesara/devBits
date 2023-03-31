@@ -2,10 +2,12 @@ const express = require('express')
 const router = express.Router()
 const User = require('../models/Users')
 const Stock = require('../models/Stocks')
+const Crypto = require('../models/Cryptos')
 let jwt = require('jsonwebtoken');
 const authenticateUser=require("../middleWare/authenticateUser")
 const bcrypt = require("bcrypt");
 const Stocks = require('../models/Stocks');
+const Cryptos = require('../models/Cryptos')
 
 router.post('/signup', async (req, res) => {
     try {
@@ -48,14 +50,19 @@ router.post('/login', async (req, res) => {
 })
 
 router.get("/user",authenticateUser.authenticateUser,async(req,res)=>{
-
     try{
         const user= await User.findOne({email: req.user.email}) 
-        const stocks = await Stocks.find({userId: user._id}).select("stock quantity -_id")
+        const stocksDetails = await Stocks.find({userId: user._id}).select("stock quantity -_id")
+        const cryptosDetails = await Cryptos.find({userId: user._id}).select("crypto quantity -_id")
+        let stocksObj={};
+        let cryptosObj={};
+        stocksDetails.forEach((stock)=>stocksObj[stock["stock"]]=stock.quantity)
+        cryptosDetails.forEach((crypto)=>cryptosObj[crypto["crypto"]]=crypto.quantity)
 
         return res.status(200).json({
             walletAmount: user.walletAmount,
-            stocks
+            stocks: stocksObj,
+            cryptos: cryptosObj
         })
     }
     catch(err){
@@ -63,7 +70,7 @@ router.get("/user",authenticateUser.authenticateUser,async(req,res)=>{
     }
 })
 
-router.post("/buy/:stock",authenticateUser.authenticateUser,async (req,res)=>{
+router.post("/buy/stock/:stock",authenticateUser.authenticateUser,async (req,res)=>{
     try{
         const stock=req.params.stock
         const user= await User.findOne({email: req.user.email})
@@ -73,7 +80,7 @@ router.post("/buy/:stock",authenticateUser.authenticateUser,async (req,res)=>{
         stock_data= new Stock({userId: user._id, stock})
 
         stock_data.quantity+=req.body.quantity
-        user.walletAmount-=req.body.quantity*req.body.prize
+        user.walletAmount-=req.body.quantity*req.body.price
         
         await user.save()
         await stock_data.save();
@@ -85,20 +92,65 @@ router.post("/buy/:stock",authenticateUser.authenticateUser,async (req,res)=>{
     }
 })
 
-router.post("/sell/:stock",authenticateUser.authenticateUser,async (req,res)=>{
+router.post("/buy/crypto/:crypto",authenticateUser.authenticateUser,async (req,res)=>{
+    try{
+        const crypto=req.params.crypto
+        const user= await User.findOne({email: req.user.email})
+        
+        let crypto_data= await Crypto.findOne({userId: user._id, crypto})
+        if(!crypto_data)
+        crypto_data= new Crypto({userId: user._id, crypto})
+
+        crypto_data.quantity+=req.body.quantity
+        user.walletAmount-=req.body.quantity*req.body.price
+        
+        await user.save()
+        await crypto_data.save();
+
+        return res.status(200).json("successfull")
+    }
+    catch(err){
+        res.status(400).json(err.message)
+    }
+})
+
+router.post("/sell/stock/:stock",authenticateUser.authenticateUser,async (req,res)=>{
     try{
         const stock=req.params.stock
         const user= await User.findOne({email: req.user.email})
         
         let stock_data= await Stock.findOne({userId: user._id, stock})
 
-        user.walletAmount+=req.body.quantity*req.body.prize
+        user.walletAmount+=req.body.quantity*req.body.price
         stock_data.quantity-=req.body.quantity
         
         if(stock_data.quantity===0)
         await Stock.findByIdAndDelete(stock_data._id)
         else     
         await stock_data.save();
+
+        await user.save()
+        return res.status(200).json("successfull")
+    }
+    catch(err){
+        res.status(400).json(err.message)
+    }
+})
+
+router.post("/sell/crypto/:crypto",authenticateUser.authenticateUser,async (req,res)=>{
+    try{
+        const crypto=req.params.crypto
+        const user= await User.findOne({email: req.user.email})
+        
+        let crypto_data= await Crypto.findOne({userId: user._id, crypto})
+
+        user.walletAmount+=req.body.quantity*req.body.price
+        Crypto_data.quantity-=req.body.quantity
+        
+        if(crypto_data.quantity===0)
+        await Crypto.findByIdAndDelete(crypto_data._id)
+        else     
+        await crypto_data.save();
 
         await user.save()
         return res.status(200).json("successfull")

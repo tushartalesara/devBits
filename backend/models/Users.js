@@ -12,7 +12,7 @@ const UserSchema=new Schema({
     },
     walletAmount:{
         type: Number,
-        default: 1000,
+        default: 1000000,
         min: 0,
     },
     password:{

@@ -6,7 +6,6 @@ import '../SLComponents/SL.css'
 const Login = () => {
     const [email,setEmail]=useState("")
     const [password,setPassword]=useState("")
-
     const handleSubmit=(e)=>{
         e.preventDefault()
         const logininfo={
@@ -14,11 +13,13 @@ const Login = () => {
             password: password
         }
         axios.post('http://localhost:5000/api/login',logininfo)
-            .then(res=>{localStorage.setItem("token", res.data)})
+            .then(res=>{
+                localStorage.setItem("token", res.data);
+                window.location.replace('/');
+            })
             .catch(err=>console.log(err))
         
-        setEmail("")
-        setPassword("")
+       
     }
     return (
         <div className='container'>
