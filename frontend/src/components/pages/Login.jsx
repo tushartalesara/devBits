@@ -14,7 +14,7 @@ const Login = () => {
             password: password
         }
         axios.post('http://localhost:5000/api/login',logininfo)
-            .then(res=>console.log(res.data))
+            .then(res=>{localStorage.setItem("token", res.data)})
             .catch(err=>console.log(err))
         
         setEmail("")

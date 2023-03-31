@@ -6,6 +6,8 @@ const Stock = (stock) => {
             <h2 className="card-item-symbol">{stock.symbol}</h2>
             <h3 className="card-item-name">Name : {stock.name}</h3>
             <h3 className="card-item-pricwe">Current Price : ${stock.price}</h3>
+            <h3 className="card-item-change-percentage">Change Percentage: {stock.changesPercentage}%</h3>
+            <h3 className="card-item-change">Change: ${stock.change}</h3>
             <h3 className="quantity">Quantity Purchased: 0</h3>
             <div className="bs-btns">
                 <button type='submit'> BUY </button>
