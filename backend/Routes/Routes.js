@@ -6,14 +6,14 @@ const Crypto = require('../models/Cryptos')
 let jwt = require('jsonwebtoken');
 const authenticateUser=require("../middleWare/authenticateUser")
 const bcrypt = require("bcrypt");
-const Stocks = require('../models/Stocks');
-const Cryptos = require('../models/Cryptos')
+const config=require('config')
+
 
 router.post('/signup', async (req, res) => {
     try {
         const existing_user= await User.findOne({email: req.body.email})
         if (existing_user) {
-            return res.status(400).json({ error: "User with given email id already exists!!" })
+            return res.status(404).json({ error: "User with given email id already exists!!" })
         }
         const encrypted_password=await bcrypt.hash(req.body.password, 10);
         created_user=await User.create({
@@ -33,15 +33,15 @@ router.post('/login', async (req, res) => {
         const existing_user= await User.findOne({email: req.body.email})
 
         if (!existing_user) {
-            return res.status(400).json({ error: "Invalid Credentials" })
+            return res.status(404).json({ error: "Account not found!!" })
         }
         const result = await bcrypt.compare(req.body.password, existing_user.password);
         if (!result) {
-            return res.status(400).json({ error: "Invalid Credentials" })
+            return res.status(404).json({ error: "Invalid Password!!" })
         }
         
         const email=existing_user.email
-        const token= jwt.sign({email},"secret")
+        const token= jwt.sign({email},config.get('JWTSecret'))
         return res.status(200).json(token)
     }
     catch (err) {
@@ -52,8 +52,8 @@ router.post('/login', async (req, res) => {
 router.get("/user",authenticateUser.authenticateUser,async(req,res)=>{
     try{
         const user= await User.findOne({email: req.user.email}) 
-        const stocksDetails = await Stocks.find({userId: user._id}).select("stock quantity -_id")
-        const cryptosDetails = await Cryptos.find({userId: user._id}).select("crypto quantity -_id")
+        const stocksDetails = await Stock.find({userId: user._id}).select("stock quantity -_id")
+        const cryptosDetails = await Crypto.find({userId: user._id}).select("crypto quantity -_id")
         let stocksObj={};
         let cryptosObj={};
         stocksDetails.forEach((stock)=>stocksObj[stock["stock"]]=stock.quantity)
@@ -145,7 +145,7 @@ router.post("/sell/crypto/:crypto",authenticateUser.authenticateUser,async (req,
         let crypto_data= await Crypto.findOne({userId: user._id, crypto})
 
         user.walletAmount+=req.body.quantity*req.body.price
-        Crypto_data.quantity-=req.body.quantity
+        crypto_data.quantity-=req.body.quantity
         
         if(crypto_data.quantity===0)
         await Crypto.findByIdAndDelete(crypto_data._id)

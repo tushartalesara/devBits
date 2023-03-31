@@ -17,7 +17,12 @@ const Login = () => {
                 localStorage.setItem("token", res.data);
                 window.location.replace('/');
             })
-            .catch(err=>console.log(err))
+            .catch(err=>{
+                if(err.response.status===404){
+                    alert(err.response.data.error)
+                }
+                else{console.log(err.message)}
+            })
         
        
     }

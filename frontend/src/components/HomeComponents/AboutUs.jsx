@@ -9,6 +9,9 @@ const AboutUs = () => {
             <br />
             <br />
             Our success is measured by the success of our clients, and we are dedicated to providing them with the best possible service. We believe in building long-term relationships with our clients, and we work tirelessly to earn and maintain their trust.
+            <br/>
+            <br/>
+            Developed By: Tushar Talesara, Ujjawal Modi, Purav Haran.
         </p>
     </div>
   )

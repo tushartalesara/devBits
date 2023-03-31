@@ -5,11 +5,14 @@ const Stock = (props) => {
     const [quantity,SetQuantity]=useState(props.quantity ? props.quantity : 0)
     const [buy,setBuy]=useState("")
     const [sell,setSell]=useState("")
-
+    let isLogedIn;
+    if(localStorage.getItem("token")==null){isLogedIn=false}
+    else{isLogedIn=true}
     const handleSell=(e)=>{
         e.preventDefault()
-        if(sell>quantity){
+        if(parseInt(sell,10)>quantity){
             alert("Quantity available is less than what you are trying to sell!!")
+            setSell("")
             return;
         }
         axios.post(`http://localhost:5000/api/sell/stock/${props.symbol}`,{
@@ -52,15 +55,19 @@ const Stock = (props) => {
             <h3 className="card-item-price">Current Price : Rs. {props.price}</h3>
             <h3 className="card-item-change-percentage">Change Percentage: {props.changesPercentage}%</h3>
             <h3 className="card-item-change">Change: Rs. {props.change}</h3>
-            <h3 className="quantity">Quantity Purchased: {quantity}</h3>
-            <div className="bs-btns">
-                <input type="text" placeholder='Enter the quantity to buy...' value={buy} onChange={(e)=>setBuy(e.target.value)}/>
-                <button type='submit' onClick={handleBuy}> BUY </button>
-            </div>
-            <div className="bs-btns">
-                <input type="text" placeholder='Enter the quantity to sell...' value={sell} onChange={(e)=>setSell(e.target.value)}/>
-                <button type='submit' onClick={handleSell}> SELL </button>
-            </div>
+            {isLogedIn ? (
+                <>
+                    <h3 className="quantity">Quantity Purchased: {quantity}</h3>
+                    <div className="bs-btns">
+                        <input type="text" placeholder='Enter the quantity to buy...' value={buy} onChange={(e)=>setBuy(e.target.value)}/>
+                        <button type='submit' onClick={handleBuy}> BUY </button>
+                    </div>
+                    <div className="bs-btns">
+                        <input type="text" placeholder='Enter the quantity to sell...' value={sell} onChange={(e)=>setSell(e.target.value)}/>
+                        <button type='submit' onClick={handleSell}> SELL </button>
+                    </div>
+                </>
+            ) : ("")}
         </div>
     )
 }

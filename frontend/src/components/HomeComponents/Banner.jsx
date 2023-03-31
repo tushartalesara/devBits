@@ -5,8 +5,7 @@ import {HashLink} from 'react-router-hash-link'
 const Banner = () => {
   return (
     <div className='banner'>
-      <h1>Everse, one place for all your needs</h1>
-      <p>Best offers available</p>
+      <h1>A place where you can trade different financial securities</h1>
       <div className="banner-btns">
         <HashLink to='#finances' className='banner-link' >
           <button className='btns btns-outline'>FINANCIAL SECURITIES</button>

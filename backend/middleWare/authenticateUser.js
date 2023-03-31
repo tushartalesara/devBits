@@ -1,4 +1,5 @@
 let jwt = require('jsonwebtoken')
+const config=require('config')
 
 const authenticateUser= async function(req,res,next){
     try{
@@ -6,7 +7,7 @@ const authenticateUser= async function(req,res,next){
         if(!token)
         return res.status(400).json("Invalid request")
         
-        const user= jwt.verify(token,"secret")
+        const user= jwt.verify(token,config.get('JWTSecret'))
         req.user=user
         next();
     }

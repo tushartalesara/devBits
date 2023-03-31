@@ -21,10 +21,21 @@ export default class Signup extends Component {
             phoneNo: this.state.phoneNo,
             password: this.state.password,
         }
-
+        if(this.state.confirmpassword!==this.state.password){
+            alert("Please enter same password in both fields!!")
+            return;
+        }
         axios.post('http://localhost:5000/api/signup', registered)
-            .then(res => console.log(res.data))
-            .catch(err => console.log(err))
+            .then(res => {
+                alert(res.data); 
+                window.location.replace('/login')
+            })
+            .catch(err => {
+                if(err.response.status===404){
+                    alert(err.response.data.error)
+                }
+                else{console.log(err.message)}
+            })
 
         this.setState({
             email: "",
